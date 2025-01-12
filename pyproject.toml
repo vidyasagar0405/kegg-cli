@@ -1,0 +1,61 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "kegg-cli"
+dynamic = ["version"]
+description = ''
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "vidyasagar0405", email = "vidyasagar0405@gmail.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = []
+
+[project.urls]
+Documentation = "https://github.com/vidyasagar0405/kegg-cli#readme"
+Issues = "https://github.com/vidyasagar0405/kegg-cli/issues"
+Source = "https://github.com/vidyasagar0405/kegg-cli"
+
+[tool.hatch.version]
+path = "src/kegg_cli/__about__.py"
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/kegg_cli tests}"
+
+[tool.coverage.run]
+source_pkgs = ["kegg_cli", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/kegg_cli/__about__.py",
+]
+
+[tool.coverage.paths]
+kegg_cli = ["src/kegg_cli", "*/kegg-cli/src/kegg_cli"]
+tests = ["tests", "*/kegg-cli/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
