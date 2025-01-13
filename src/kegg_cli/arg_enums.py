@@ -1,5 +1,9 @@
 from enum import StrEnum
 
+class SeqType(StrEnum):
+    ntseq = "ntseq"
+    aaseq = "aaseq"
+
 class InfoDatabase (StrEnum):
     kegg     = "kegg" 
     pathway  = "pathway" 
