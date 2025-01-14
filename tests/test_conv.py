@@ -53,6 +53,6 @@ def test_conv_ncbigene():
 
 
 def test_conv_ncbiprotein():
-    result = runner.invoke(app, [ "conv", "genes", "ncbi-proteinid:YP_009046967 ncbi-proteinid:YP_009046968 ncbi-proteinid:YP_009046969 ncbi-proteinid:YP_009046970"])
+    result = runner.invoke(app, ["conv", "genes", "ncbi-proteinid:YP_009046967 ncbi-proteinid:YP_009046968 ncbi-proteinid:YP_009046969 ncbi-proteinid:YP_009046970"])
     assert result.exit_code == 0
     assert expected_result_4.strip() in result.output.strip()
