@@ -21,16 +21,13 @@ app = typer.Typer()
 
 @app.command()
 def get_seq(
-    input: str = typer.Argument(
-        ..., help="Pathway code (path:hsa00010) or Module (md:rsz_M00005) or Input file or args ('id1 id2') of gene IDs"
-    ),
-    delimiter: str = typer.Option("\t", "--delimiter", help="file delimiter"),
-    field: int = typer.Option(0, "--field", help="geneID cloumn/field in file"),
-    seq_type: SeqType = typer.Option(SeqType.ntseq, "--seq-type", help="Type of sequence to retrieve"),
-    output: str = typer.Option(
-        get_random_file_name_current("fasta"), "-o", "--output", help="Output file to save concatenated sequences"
-    ),
-):
+            input: str = typer.Argument( ..., help="Pathway code (path:hsa00010) or Module (md:rsz_M00005) or Input file or args ('id1 id2') of gene IDs"),
+            delimiter: str = typer.Option("\t", "--delimiter", help="file delimiter"),
+            field: int = typer.Option(0, "--field", help="geneID cloumn/field in file"),
+            seq_type: SeqType = typer.Option(SeqType.ntseq, "--seq-type", help="Type of sequence to retrieve"),
+            output: str = typer.Option( get_random_file_name_current("fasta"), "-o", "--output", help="Output file to save concatenated sequences"),
+            ):
+
     if os.path.exists(input):
         gene_ids = file_to_list(input, field, delimiter)
     elif "path:" in input:

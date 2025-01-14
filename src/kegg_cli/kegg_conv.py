@@ -36,14 +36,19 @@ def _q(op, arg1, arg2=None, arg3=None):
 _q.previous = 0
 
 
-def kegg_conv(target_db, source_db, option=None):
-    """KEGG conv - convert KEGG identifiers to/from outside identifiers.
+def kegg_conv(target_db: str, source_db: str, option: str = None):
+    """Convert KEGG identifiers to/from outside identifiers.
 
-    Arguments:
-     - target_db - Target database
-     - source_db_or_dbentries - source database or database entries
-     - option - Can be "turtle" or "n-triple" (string).
+    Args:
+        target_db (str): Target database for conversion
+        source_db (str): Source database or database entries (can be a single entry or multiple entries joined by '+')
+        option (str, optional): Output format. Can be "turtle" or "n-triple". Defaults to None.
 
+    Returns:
+        TextIOWrapper: File-like object containing the conversion results
+
+    Raises:
+        ValueError: If invalid option is provided or if arguments are missing/invalid
     """
     if option and option not in ["turtle", "n-triple"]:
         msg = "Invalid option arg for kegg conv request."
