@@ -20,10 +20,10 @@ def combine_ids(ids:list[str]) -> list[str]:
     return combined_list
 
 
-def file_to_list(file:str) -> list[str]:
+def file_to_list(file:str, field:int, delimiter:str = "\t") -> list[str]:
     try:
         with open(file, 'r') as f:
-            gene_ids = [line.split('\t')[1].strip() for line in f]
+            gene_ids = [line.split(delimiter)[field].strip() for line in f]
         return gene_ids
     except FileNotFoundError:
         print(f"[red]{file} not found. Cannot proceed with gene sequence retrieval.[/red]")

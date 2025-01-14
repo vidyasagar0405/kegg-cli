@@ -22,10 +22,12 @@ app.command()(link)
 
 @app.command()
 def get_seq(input: str = typer.Argument(..., help="Input file or list of gene IDs"), 
-             seq_type: SeqType = typer.Option(SeqType.ntseq, "--seq-type", help="Type of sequence to retrieve"), 
-             output: str = typer.Option(get_random_file_name_current("fasta"), "-o", "--output", help="Output file to save concatenated sequences")):
+            delimiter: str = typer.Option("\t", "--delimiter", help="file delimiter"), 
+            field: int = typer.Option(0, "--field", help="geneID cloumn/field in file"), 
+            seq_type: SeqType = typer.Option(SeqType.ntseq, "--seq-type", help="Type of sequence to retrieve"), 
+            output: str = typer.Option(get_random_file_name_current("fasta"), "-o", "--output", help="Output file to save concatenated sequences")):
     if os.path.exists(input):
-        gene_ids = file_to_list(input)
+        gene_ids = file_to_list(input, field, delimiter)
     elif type(input) is str:
         gene_ids = input.split(" ")
 
@@ -41,7 +43,7 @@ def get_seq(input: str = typer.Argument(..., help="Input file or list of gene ID
                 with open(f"{gene_id}.fa", 'w') as gene_file:
                     gene_file.write(response)
                 print(f"[green][{index}/{len(combined_list)}] Retrieved {gene_id.replace('+', ',')} gene {seq_type.value}[/green]")
-                time.sleep(0.4)  # To avoid overwhelming the server
+                time.sleep(0.3333333333)  # To avoid overwhelming the server
             except Exception as e:
                 print(f"[red][{index}/{len(combined_list)}] Failed to retrieve {gene_id}: {e}[/red]")
 

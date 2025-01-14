@@ -21,9 +21,10 @@ def get(query: str = typer.Argument(..., help="The KEGG query string"),
     print(kegg_get(query, option=option).read())
 
 @app.command()
-def list(database: str = typer.Argument(..., help="The KEGG database to list"), 
+def list(query: str = typer.Argument(..., help="The KEGG query(s) to list"), 
          org: str = typer.Option("", "--organism", "-org", help="Organism code to filter the list")):
-    print(kegg_list(database, org=org).read())
+    query = query.replace(' ', '+')
+    print(kegg_list(query, org=org).read())
 
 @app.command()
 def find(query: str = typer.Argument(..., help="The search query"),
@@ -34,8 +35,11 @@ def find(query: str = typer.Argument(..., help="The search query"),
 
 @app.command()
 def conv(to_db: str = typer.Argument(..., help="The target database for conversion"), 
-         from_db: str = typer.Argument(..., help="The source database for conversion")):
-    print(kegg_conv(to_db, from_db).read())
+         from_db: str = typer.Argument(..., help="The source database for conversion"),
+         option: str = typer.Option(None, "--option", "-op", help="Additional query option, optional")):
+    to_db = to_db .replace(' ', '+')
+    from_db = from_db .replace(' ', '+')
+    print(kegg_conv(to_db, from_db, option=option).read())
 
 @app.command()
 def link(target_db : str = typer.Argument(..., help="The target database for query"), 
@@ -43,5 +47,4 @@ def link(target_db : str = typer.Argument(..., help="The target database for que
          option: str = typer.Option("", "--option", "-op", help="Additional query option, optional")):
     target_db = target_db.replace(' ', '+')
     source_db = source_db.replace(' ', '+')
-    option= option.replace(' ', '+')
     print(kegg_link(target_db=target_db, source_db=source_db, option=option).read())
