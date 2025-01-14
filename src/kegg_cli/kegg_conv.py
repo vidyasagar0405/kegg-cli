@@ -25,7 +25,7 @@ def _q(op, arg1, arg2=None, arg3=None):
         args = f"{op}/{arg1}"
     resp = urlopen(URL % (args))
 
-    if "image" == arg2:
+    if arg2 == "image":
         return resp
 
     handle = io.TextIOWrapper(resp, encoding="UTF-8")
@@ -46,17 +46,15 @@ def kegg_conv(target_db, source_db, option=None):
 
     """
     if option and option not in ["turtle", "n-triple"]:
-        raise ValueError("Invalid option arg for kegg conv request.")
+        msg = "Invalid option arg for kegg conv request."
+        raise ValueError(msg)
 
     if isinstance(source_db, list):
         source_db = "+".join(source_db)
 
-    if ( target_db and source_db != ("" or None)):
-        if option:
-            resp = _q("conv", target_db, source_db, option)
-        else:
-            resp = _q("conv", target_db, source_db)
+    if target_db and source_db != ("" or None):
+        return _q("conv", target_db, source_db, option) if option else _q("conv", target_db, source_db)
 
-        return resp
     else:
-        raise ValueError("Bad argument target_db or source_db for kegg conv request.")
+        msg = "Bad argument target_db or source_db for kegg conv request."
+        raise ValueError(msg)

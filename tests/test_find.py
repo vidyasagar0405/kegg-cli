@@ -1,5 +1,5 @@
-import pytest
 from typer.testing import CliRunner
+
 from kegg_cli.main import app
 
 runner = CliRunner()
@@ -30,17 +30,20 @@ expected_result_3 = """
 path:map00966\tGlucosinolate biosynthesis
 """
 
+
 def test_find_no_arg():
     result = runner.invoke(app, ["find", "ralf osa"])
     assert result.exit_code == 0
     assert expected_result_1.strip() in result.output.strip()
 
+
 def test_find_all_arg():
-    result = runner.invoke(app, [ "find", "C7H10O5", "-db", "compound", "-op", "formula" ])
+    result = runner.invoke(app, ["find", "C7H10O5", "-db", "compound", "-op", "formula"])
     assert result.exit_code == 0
     assert expected_result_2.strip() in result.output.strip()
 
+
 def test_find_only_db():
-    result = runner.invoke(app, [ "find", "glucosi", "-db", "pathway" ])
+    result = runner.invoke(app, ["find", "glucosi", "-db", "pathway"])
     assert result.exit_code == 0
     assert expected_result_3.strip() in result.output.strip()

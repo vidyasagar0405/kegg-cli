@@ -1,5 +1,5 @@
-import pytest
 from typer.testing import CliRunner
+
 from kegg_cli.main import app
 
 runner = CliRunner()
@@ -88,15 +88,18 @@ path:map00010\tcpd:C15973
 path:map00010\tcpd:C16255
 """
 
+
 def test_conv_1():
     result = runner.invoke(app, ["link", "rsz", "rsz00966"])
     assert result.exit_code == 0
     assert expected_result_1.strip() in result.output.strip()
 
+
 def test_conv_2():
     result = runner.invoke(app, ["link", "pathway", "hsa:10458 ece:Z5100"])
     assert result.exit_code == 0
     assert expected_result_2.strip() in result.output.strip()
+
 
 def test_conv_3():
     result = runner.invoke(app, ["link", "cpd", "map00010"])

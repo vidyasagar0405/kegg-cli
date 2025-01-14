@@ -1,5 +1,5 @@
-import pytest
 from typer.testing import CliRunner
+
 from kegg_cli.main import app
 
 runner = CliRunner()
@@ -26,10 +26,18 @@ C01290	Lactosylceramide; beta-D-Galactosyl-(1->4)-beta-D-glucosyl-(1<->1)-cerami
 G00092	Lactosylceramide; LacCer; CD17; (Gal)1 (Glc)1 (Cer)1
 """
 
+
 def test_list_gene():
-    result = runner.invoke(app, ["list", "rsz:19816419 rsz:19816420 rsz:19816421 rsz:19816422 rsz:19816423 rsz:19816424 rsz:19816425 rsz:19816435 rsz:19816436 rsz:19816438 rsz:19816439 rsz:19816441 rsz:19816442 rsz:19816443"])
+    result = runner.invoke(
+        app,
+        [
+            "list",
+            "rsz:19816419 rsz:19816420 rsz:19816421 rsz:19816422 rsz:19816423 rsz:19816424 rsz:19816425 rsz:19816435 rsz:19816436 rsz:19816438 rsz:19816439 rsz:19816441 rsz:19816442 rsz:19816443",
+        ],
+    )
     assert result.exit_code == 0
     assert expected_result_1.strip() in result.output.strip()
+
 
 def test_list_cmp():
     result = runner.invoke(app, ["list", "C01290 G00092"])

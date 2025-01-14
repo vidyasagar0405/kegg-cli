@@ -1,5 +1,5 @@
-import pytest
 from typer.testing import CliRunner
+
 from kegg_cli.main import app
 
 runner = CliRunner()
@@ -135,10 +135,12 @@ SGASRPLPPIAQALKEHLAAYEKSKGPEALGFKPARQAPPPPTGPSGLPPLAQALKDHLA
 AYEQSKKG
 """
 
+
 def test_get_no_arg():
     result = runner.invoke(app, ["get", "eco:b0002"])
     assert result.exit_code == 0
     assert expected_result_1.strip() in result.output.strip()
+
 
 def test_get_option():
     result = runner.invoke(app, ["get", "hsa:10458 ece:Z5100", "-op", "aaseq"])
