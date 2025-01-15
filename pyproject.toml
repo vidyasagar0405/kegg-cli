@@ -5,11 +5,11 @@ build-backend = "hatchling.build"
 [project]
 name = "kegg-cli"
 dynamic = ["version"]
-description = ''
+description = 'a CLI tool for KEGG. It can use all conventional KEGG REST API commands and a custom command get-seq to get nt/aa seq from given gene IDs/pathway/module'
 readme = "README.md"
 requires-python = ">=3.8"
 license = "MIT"
-keywords = []
+keywords = ["KEGG", "cli"]
 authors = [
   { name = "vidyasagar0405", email = "vidyasagar0405@gmail.com" },
 ]
@@ -24,7 +24,7 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = ["requests", "typer", "rich", "biopython"]
+dependencies = ["typer", "rich", "biopython"]
 
 [project.urls]
 Documentation = "https://github.com/vidyasagar0405/kegg-cli#readme"
