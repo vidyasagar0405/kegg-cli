@@ -1,42 +1,19 @@
 import io
 import time
-from urllib.request import urlopen
-
-from Bio._utils import function_with_previous
+import requests
 
 
-@function_with_previous
-def _q(op, arg1, arg2=None, arg3=None):
-    delay = 0.333333333  # one third of a second
-    current = time.time()
-    wait = _q.previous + delay - current
-    if wait > 0:
-        time.sleep(wait)
-        _q.previous = current + wait
-    else:
-        _q.previous = current
+def _get(command:str, arg1:str, arg2:str = "", arg3:str = "") -> str:
+    BASE_URL = "https://rest.kegg.jp"
+    delay = 0.3333333333 # third of a second
+    url = f"{BASE_URL}/{command}/{arg1}/{arg2}/{arg3}"
 
-    URL = "https://rest.kegg.jp/%s"
-    if arg2 and arg3:
-        args = f"{op}/{arg1}/{arg2}/{arg3}"
-    elif arg2:
-        args = f"{op}/{arg1}/{arg2}"
-    else:
-        args = f"{op}/{arg1}"
-    resp = urlopen(URL % (args))
-
-    if arg2 == "image":
-        return resp
-
-    handle = io.TextIOWrapper(resp, encoding="UTF-8")
-    handle.url = resp.url
-    return handle
+    response = requests.get(url)
+    time.sleep(delay)
+    return response.text
 
 
-_q.previous = 0
-
-
-def kegg_conv(target_db: str, source_db: str, option: str = None):
+def kegg_conv(target_db: str, source_db: str, option: str = ""):
     """Convert KEGG identifiers to/from outside identifiers.
 
     Args:
@@ -58,7 +35,7 @@ def kegg_conv(target_db: str, source_db: str, option: str = None):
         source_db = "+".join(source_db)
 
     if target_db and source_db != ("" or None):
-        return _q("conv", target_db, source_db, option) if option else _q("conv", target_db, source_db)
+        return _get("conv", target_db, source_db, option) if option else _get("conv", target_db, source_db)
 
     else:
         msg = "Bad argument target_db or source_db for kegg conv request."

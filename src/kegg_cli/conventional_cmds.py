@@ -59,7 +59,7 @@ def conv(to_db: str = typer.Argument(..., help="The target database for conversi
     """
     to_db = to_db .replace(' ', '+')
     from_db = from_db .replace(' ', '+')
-    print(kegg_conv(to_db, from_db, option=option).read())
+    print(kegg_conv(to_db, from_db, option=option))
 
 @app.command()
 def link(target_db: str = typer.Argument(..., help="The target database for query"), 
