@@ -78,7 +78,7 @@ def get_seq(
         gene_ids = pathway_to_list(input)
     elif "md:" in input:
         gene_ids = module_to_list(input)
-    elif type(input) is str:
+    else:
         gene_ids = input.split(" ")
 
     try:

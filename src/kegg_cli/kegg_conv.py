@@ -10,7 +10,16 @@ def _get(command:str, arg1:str, arg2:str = "", arg3:str = "") -> str:
 
     response = requests.get(url)
     time.sleep(delay)
-    return response.text
+
+    if response.status_code == 200:
+        return response.text
+    elif response.status_code == 400:
+        requests.HTTPError("status code:400	Bad request (syntax error, wrong database name, etc.)")
+    elif response.status_code == 404:
+        requests.HTTPError("status code:404	Not found (e.g., requesting amino acid sequence for RNA)")
+    else:
+        requests.HTTPError("Unknown Error")
+    return ""
 
 
 def kegg_conv(target_db: str, source_db: str, option: str = ""):
@@ -20,9 +29,6 @@ def kegg_conv(target_db: str, source_db: str, option: str = ""):
         target_db (str): Target database for conversion
         source_db (str): Source database or database entries (can be a single entry or multiple entries joined by '+')
         option (str, optional): Output format. Can be "turtle" or "n-triple". Defaults to None.
-
-    Returns:
-        TextIOWrapper: File-like object containing the conversion results
 
     Raises:
         ValueError: If invalid option is provided or if arguments are missing/invalid

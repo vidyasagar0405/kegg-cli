@@ -1,3 +1,4 @@
+import os
 import typer
 from Bio.KEGG.REST import (
     kegg_find,
@@ -7,8 +8,11 @@ from Bio.KEGG.REST import (
     kegg_list,
 )
 from kegg_cli.kegg_conv import kegg_conv
+from kegg_cli._utils import combine_ids, file_to_list
 
 app = typer.Typer()
+
+
 
 @app.command()
 def info(database: str = typer.Argument(..., help="The KEGG database to retrieve information from")):
@@ -26,8 +30,13 @@ def get(query: str = typer.Argument(..., help="The KEGG query string"),
     Gets detailed information about specific entries in KEGG databases.
     Supports various options like sequence retrieval (ntseq, aaseq).
     """
-    query = query.replace(' ', '+')
-    print(kegg_get(query, option=option).read())
+    if os.path.exists(query):
+        query_list = file_to_list(query, delimiter='\t', field=0)
+    else:
+        query_list = query.split(' ')
+    combined_ids = combine_ids(query_list)
+    for id in combined_ids:
+        print(kegg_get(id, option=option).read())
 
 @app.command()
 def list(query: str = typer.Argument(..., help="The KEGG query(s) to list"), 
@@ -36,8 +45,13 @@ def list(query: str = typer.Argument(..., help="The KEGG query(s) to list"),
 
     Lists entries in specified KEGG databases, optionally filtered by organism.
     """
-    query = query.replace(' ', '+')
-    print(kegg_list(query, org=org).read())
+    if os.path.exists(query):
+        query_list = file_to_list(query, delimiter='\t', field=0)
+    else:
+        query_list = query.split(' ')
+    combined_ids = combine_ids(query_list)
+    for id in combined_ids:
+        print(kegg_list(id, org=org).read())
 
 @app.command()
 def find(query: str = typer.Argument(..., help="The search query"),
@@ -47,8 +61,13 @@ def find(query: str = typer.Argument(..., help="The search query"),
 
     Performs keyword searches in KEGG databases and returns matching entries.
     """
-    query = query.replace(' ', '+')
-    print(kegg_find(database=db, query=query, option=option).read())
+    if os.path.exists(query):
+        query_list = file_to_list(query, delimiter='\t', field=0)
+    else:
+        query_list = query.split(' ')
+    combined_ids = combine_ids(query_list)
+    for id in combined_ids:
+        print(kegg_find(database=db, query=id, option=option).read())
 
 @app.command()
 def conv(to_db: str = typer.Argument(..., help="The target database for conversion"), 
@@ -57,9 +76,13 @@ def conv(to_db: str = typer.Argument(..., help="The target database for conversi
     """
     Converts identifiers between KEGG databases and external databases.
     """
-    to_db = to_db .replace(' ', '+')
-    from_db = from_db .replace(' ', '+')
-    print(kegg_conv(to_db, from_db, option=option))
+    if os.path.exists(from_db):
+        query_list = file_to_list(from_db, delimiter='\t', field=0)
+    else:
+        query_list = from_db.split(' ')
+    combined_ids = combine_ids(query_list)
+    for id in combined_ids:
+        print(kegg_conv(to_db, id, option=option))
 
 @app.command()
 def link(target_db: str = typer.Argument(..., help="The target database for query"), 
@@ -68,6 +91,10 @@ def link(target_db: str = typer.Argument(..., help="The target database for quer
     """
     Finds related entries between different KEGG databases.
     """
-    target_db = target_db.replace(' ', '+')
-    source_db = source_db.replace(' ', '+')
-    print(kegg_link(target_db=target_db, source_db=source_db, option=option).read())
+    if os.path.exists(source_db):
+        query_list = file_to_list(source_db, delimiter='\t', field=0)
+    else:
+        query_list = source_db.split(' ')
+    combined_ids = combine_ids(query_list)
+    for id in combined_ids:
+        print(kegg_link(target_db=target_db, source_db=id, option=option).read())
